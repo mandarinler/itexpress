@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { db } from "./firebase"; 
-import { collection, getDocs } from "firebase/firestore";
-
+import { collection, query, orderBy, getDocs } from "firebase/firestore";
+import { db } from "./firebase";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,18 +9,20 @@ function App() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const [services, setServices] = useState([]);
   // Fetch services from Firestore
+
   useEffect(() => {
     const fetchServices = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "services"));
-        const servicesData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setServices(servicesData);
-      } catch (err) {
-        console.error("Error fetching services:", err);
-      }
+      const q = query(
+        collection(db, "services"),
+        orderBy("createdAt", "desc") // 🔹 newest first
+      );
+
+      const querySnapshot = await getDocs(q);
+      const servicesData = [];
+      querySnapshot.forEach((doc) => {
+        servicesData.push({ id: doc.id, ...doc.data() });
+      });
+      setServices(servicesData);
     };
 
     fetchServices();
@@ -89,31 +90,6 @@ function App() {
     window.addEventListener("scroll", handleScrollEvent);
     return () => window.removeEventListener("scroll", handleScrollEvent);
   }, []);
-
-  // Editable services array
-  // const [services, setServices] = useState([
-  //   {
-  //     id: 1,
-  //     title: "IT Dəstək / HelpDesk",
-  //     description:
-  //       "Biz kiçik şəbəkələrdən iri şəbəkələrədək müxtəlif miqyaslı şəbəkələrin tətbiqi, idarə edilməsi, mühafizəsi və dəstəklənməsi sahələrində təcrübəyə malikik.Biz bunu nəzərimizdə tutmaqla, Sizin mövcud fəaliyyətlərinizə mümkün qədər mükəmməl şəkildə inteqrasiya olunmaq, eyni zamanda, Sizin istifadəçilərinizdə ilk başdan gözəl təəssürat yaratmaq üçün təkmilləşdirmələr tətbiq etmək imkanını kəşf etmək məqsədi güdürük.",
-  //     image: "https://i.hizliresim.com/9sd41u1.png",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "IT konsaltinq və Audit",
-  //     description:
-  //       "İT sahəsində konsaltinq xidmətləri göstərən şirkət olaraq, biz peşəkar məsləhət xidmətlərimizlə yanaşı, müasir texnologiya təmin etməklə dəyərli müştərilərimizin sayını artırmağımızla qürur duyuruq. İT sənayesi sahəsində mütəxəssis olan məsləhətçilərimiz təxirəsalınmaz, eyni zamanda peşəkar məsləhətlər təmin etmək üçün səriştəli, bacarıqlı və təcrübəlidirlər. Onlar müştərilərin problemlərini və ya ehtiyaclarını dərindən anlayır və müvafiq məsələlərdə qiymətli məsələhətlərini verirlər. Bu məsləhətlər praktik və iqtisadi cəhətdən sərfəlidir.",
-  //     image: "https://i.hizliresim.com/9sd41u1.png",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Web saytların yaradılması",
-  //     description:
-  //       "Biz sifarişçilərimizin tələb və istəkləri əsasında, onların fəaliyyət sahələrinin əsas elementlərini nəzərə çarpdıran orijinal və yüksək zövqlü veb-saytların yaradılması üzrə tam xidmətlər kompleksini təklif edirik. Dizaynerlərimizin peşəkarlığı, yüksək zövqləri və ağılasığmaz yaradıcılıq ambisiyaları müxtəlif növ layihələrin həyata keçirilməsinə imkan verir. Firma stillərinin yaradılması, loqotiplər, satış nişanları, peklam-poliqrafiya məhsullarının hazırlanması, korporativ və imic saytlarının yaradılması, arxitektura dizaynı, interyer dizaynı və illisturasiyaları fəaliyyətimizin əsasını təşkil edir. Öz individuallığımızı qoruyaraq, sifarişçilərimizin fikirlərinə hörmətlə yanaşır, fəaliyyət sahələrini və tələblərini öyrənir, istəklərini həyata keçiririk. Müştərilərimizin zövqünü oxşayan müasir, rahat, funksional və nəfis veb-saytlar işləyib-hazırlayırıq.",
-  //     image: "https://i.hizliresim.com/9sd41u1.png",
-  //   },
-  // ]);
 
   return (
     <div className="app">
@@ -212,7 +188,10 @@ function App() {
           {services.map((service) => (
             <div key={service.id} className="service-section">
               <div className="service-image">
-                <img src="https://i.hizliresim.com/9sd41u1.png" alt={service.title} />
+                <img
+                  src="https://i.hizliresim.com/9sd41u1.png"
+                  alt={service.title}
+                />
               </div>
               <div className="service-content">
                 <h3>{service.title}</h3>

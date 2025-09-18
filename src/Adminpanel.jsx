@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebase";
 import {
   collection,
@@ -28,14 +29,22 @@ function AdminPanel() {
 
   // Add service
   const addService = async () => {
-    if (!title.trim() || !description.trim()) return;
-    await addDoc(collection(db, "services"), { title, description });
-    setTitle("");
-    setDescription("");
-    const querySnapshot = await getDocs(collection(db, "services"));
-    setServices(
-      querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-    );
+    if (!title || !description || !imageUrl) return;
+
+    try {
+      await addDoc(collection(db, "services"), {
+        title,
+        description,
+        imageUrl,
+        createdAt: serverTimestamp(), // 🔹 Add timestamp
+      });
+      setTitle("");
+      setDescription("");
+      setImageUrl("");
+      fetchServices(); 
+    } catch (err) {
+      console.error("Error adding service:", err);
+    }
   };
 
   // Delete service
