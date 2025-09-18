@@ -1,0 +1,455 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.app {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.navbar {
+  width: 100%;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.logo img {
+  height: 40px;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s;
+  position: relative;
+  outline: none;          
+  box-shadow: none;  
+}
+
+.nav-links button:hover {
+  color: #FE0000;
+}
+
+/* underline when active */
+.nav-links button.active {
+  color: #FE0000;
+}
+.nav-links button.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background-color: #FE0000;
+}
+
+
+/* Hamburger for mobile */
+.menu-toggle {
+  color: #333;
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    flex-direction: column;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  .nav-links.open {
+    max-height: 300px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* Prevent content hiding under navbar */
+body {
+  padding-top: 70px;
+}
+
+
+
+
+/* Section styles for Home */
+.home-section {
+  height: 80vh; 
+  background: url("./assets/homeBackground.jpeg") no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.404);
+}
+
+.home-overlay {
+  background: rgba(0, 0, 0, 0.5); 
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 900px; 
+  margin: 0 auto; 
+}
+
+.home-overlay h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.home-overlay p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Section styles for why choose us */
+.section-why-choose-us {
+  background: #ffffff; /* whole section white */
+  width: 100%;
+  padding: 100px 20px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif; /* modern font */
+}
+
+.why-choose-us-container {
+  height: auto; 
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.intro-text {
+  background-color: #FE0000;
+  color: #ffffff;
+  padding: 30px 60px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* subtle text shadow */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* elevated shadow */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.intro-text:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+.section-why-choose-us h2 {
+  font-size: 3rem;
+  margin-bottom: 25px;
+  color: white;
+  font-weight: 700;
+}
+
+.section-why-choose-us p {
+  font-size: 1.3rem;
+  margin-bottom: 60px;
+  line-height: 1.8;
+  color: white;
+  max-width: 800px;
+  font-weight: 500;
+}
+
+.features {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  background: #FE0000; 
+  color: rgb(255, 255, 255); 
+  padding: 40px 30px;
+  border-radius: 15px;
+  flex: 1 1 30%;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+.feature-card h3 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #ffffff; 
+  font-weight: 700;
+}
+
+.feature-card p {
+  font-size: 1.1rem;
+  color: #f0f0f0; 
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .section-why-choose-us {
+    padding: 60px 10px;
+  }
+
+  .intro-text {
+    padding: 20px 25px;
+    font-size: 1.1rem;
+  }
+
+  .section-why-choose-us h2 {
+    font-size: 2rem;
+  }
+
+  .section-why-choose-us p {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .feature-card {
+    flex: 1 1 100%;
+    padding: 25px 15px;
+  }
+
+  .feature-card h3 {
+    font-size: 1.4rem;
+  }
+
+  .feature-card p {
+    font-size: 0.95rem;
+  }
+}
+
+
+/* Section styles for Services */
+.section-services {
+  background: white;
+  padding: 80px 20px;
+}
+
+.section-services h2 {
+  text-align: center;
+  color: black;
+  margin-bottom: 50px;
+  font-size: 2.8rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.service-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 60px;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.service-image {
+  flex: 0 0 200px;
+}
+
+.service-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.service-content {
+  flex: 1;
+}
+
+.service-content h3 {
+  font-size: 1.8rem;
+  color: black;
+  margin-bottom: 15px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.service-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .service-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .service-image {
+    flex: 1 1 100%;
+  }
+
+  .service-content {
+    flex: 1 1 100%;
+  }
+}
+
+/*contact section*/
+.section-contact {
+  height: 80vh;
+  background: #ffffff; /* white background */
+  padding: 80px 20px;
+}
+
+.section-contact h2 {
+  text-align: center;
+  color: #FE0000; /* vibrant red */
+  margin-bottom: 50px;
+  font-size: 2.8rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #a80000; /* dark red border */
+  background: #fff0f0; /* very light red background */
+  font-size: 1rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #4a0000; /* dark red text */
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #FE0000; /* vibrant red on focus */
+  box-shadow: 0 0 5px rgba(254,0,0,0.5);
+}
+
+.contact-form button {
+  padding: 15px;
+  border-radius: 10px;
+  background: #FE0000; /* vibrant red */
+  color: #fff;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.3s;
+}
+
+.contact-form button:hover {
+  background: #c80000; /* slightly darker red on hover */
+}
+
+.contact-form p {
+  text-align: center;
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-form {
+    gap: 15px;
+  }
+}
+
+/* Footer styles */
+.footer {
+  background-color: #FE0000; /* vibrant red */
+  color: #ffffff;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.footer-container p {
+  margin: 5px 0;
+  font-size: 1.1rem;
+}
+
+.footer-container p:first-child {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 15px;
+  }
+
+  .footer-container p {
+    font-size: 1rem;
+  }
+}
+

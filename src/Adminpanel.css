@@ -1,0 +1,155 @@
+.admin-container {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #1a1a2e;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 12px;
+  margin: 6px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.sidebar li:hover {
+  background: #16213e;
+}
+
+.sidebar li.active {
+  background: #0f3460;
+}
+
+.sidebar li.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Main content */
+.content {
+  flex: 1;
+  padding: 30px;
+  background: #f4f4f9;
+  overflow-y: auto;
+}
+
+.content h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin-bottom: 30px;
+}
+
+
+/* Form Inputs */
+.form-input {
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  font-size: 16px;
+  color: #000; /* 🔹 set font color to black */
+}
+
+/* Form Textarea - bigger and styled */
+.form-textarea {
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  font-size: 16px;
+  min-height: 120px;
+  resize: vertical;
+  color: #000; /* 🔹 set font color to black */
+}
+
+
+.form button {
+  padding: 10px;
+  margin-top: 10px;
+  background: #0f3460;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background: #16213e;
+}
+
+/* Services list */
+.service-list {
+  list-style: none;
+  padding: 0;
+}
+
+.service-list li {
+  background: white;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-list li strong {
+  font-size: 16px;
+  color: #0f3460;
+}
+
+.service-list li p {
+  margin: 4px 0 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Delete button */
+.delete-btn {
+  background: #e94560;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background: #d32f45;
+}
