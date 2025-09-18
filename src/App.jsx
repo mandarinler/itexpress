@@ -4,7 +4,6 @@ import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
 function App() {
-  
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [services, setServices] = useState([]);
@@ -62,37 +61,82 @@ function App() {
   }, []);
 
   // Track active section on scroll
-  useEffect(() => {
-  const sections = Array.from(document.querySelectorAll("section[id]"));
-  if (!sections.length) return;
+ useEffect(() => {
+  // helper: list sections with ids
+  const getSections = () => Array.from(document.querySelectorAll("section[id]"));
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      // pick the section with the largest visible area
-      let maxRatio = 0;
-      let mostVisibleId = null;
+  let io = null;
+  let raf = null;
 
-      entries.forEach((entry) => {
-        if (entry.intersectionRatio > maxRatio) {
-          maxRatio = entry.intersectionRatio;
-          mostVisibleId = entry.target.id;
+  const createObserver = () => {
+    const sections = getSections();
+    if (!sections.length) return;
+
+    io = new IntersectionObserver(
+      (entries) => {
+        // debug: uncomment to see intersection ratios in console
+        // entries.forEach(e => console.log(e.target.id, e.intersectionRatio));
+
+        // pick the entry with the largest visible ratio
+        let maxRatio = 0;
+        let mostVisibleId = null;
+
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio > maxRatio) {
+            maxRatio = entry.intersectionRatio;
+            mostVisibleId = entry.target.id;
+          }
+        });
+
+        // if we got a visible section, set it
+        if (mostVisibleId && maxRatio > 0) {
+          setActiveSection(mostVisibleId);
+          return;
         }
-      });
 
-      if (mostVisibleId) {
-        setActiveSection(mostVisibleId);
+        // fallback: if nothing has positive ratio (rare), pick nearest section by distance to top
+        let nearestId = null;
+        let nearestDist = Infinity;
+        sections.forEach((s) => {
+          const rect = s.getBoundingClientRect();
+          // distance from viewport center (or top)
+          const dist = Math.abs(rect.top + rect.height / 2 - (window.innerHeight / 2));
+          if (dist < nearestDist) {
+            nearestDist = dist;
+            nearestId = s.id;
+          }
+        });
+        if (nearestId) setActiveSection(nearestId);
+      },
+      {
+        threshold: [0, 0.15, 0.3, 0.5, 0.75, 1], // include 0 so tiny visibility still reported
+        root: null,
+        rootMargin: "-10% 0px -30% 0px", // tweak to your header size; this works well usually
       }
-    },
-    {
-      threshold: [0.25, 0.5, 0.75, 1], // multiple thresholds for smoother switching
-      root: null,
-      rootMargin: "-10% 0px -30% 0px", // tweak if you want earlier/later activation
-    }
-  );
+    );
 
-  sections.forEach((s) => observer.observe(s));
-  return () => observer.disconnect();
-}, []);
+    sections.forEach((s) => io.observe(s));
+  };
+
+  // Use requestAnimationFrame so we observe after the layout has (likely) stabilized
+  raf = requestAnimationFrame(() => {
+    createObserver();
+  });
+
+  // Also listen for window resize/reflow and rebuild observer (optional robustness)
+  const onResize = () => {
+    if (io) io.disconnect();
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => createObserver());
+  };
+  window.addEventListener("resize", onResize);
+
+  return () => {
+    if (io) try { io.disconnect(); } catch (e) {}
+    if (raf) cancelAnimationFrame(raf);
+    window.removeEventListener("resize", onResize);
+  };
+}, [services.length]); //
 
   return (
     <div className="app">
