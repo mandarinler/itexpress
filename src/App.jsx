@@ -172,7 +172,6 @@ function App() {
         <div className="footer-container">
           <p>© 2025 ITExpress. Bütün hüquqlar qorunur.</p>
           <p>office@itexpress.az</p>
-          <p>+994 70 201 1392</p>
           <p>+994 77 733 2626</p>
         </div>
       </footer>
