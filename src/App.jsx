@@ -4,6 +4,7 @@ import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
 function App() {
+  
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [services, setServices] = useState([]);
@@ -15,12 +16,11 @@ function App() {
 
   // Scroll to section
   const handleScroll = (id) => {
-    const target = document.getElementById(id);
-    if (target) {
-      window.scrollTo({ top: target.offsetTop - 70, behavior: "smooth" });
-    }
-    setIsOpen(false);
-  };
+  const target = document.getElementById(id);
+  if (!target) return;
+  setIsOpen(false);
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
   // Handle contact form input
   const handleInputChange = (e) => {
@@ -63,21 +63,36 @@ function App() {
 
   // Track active section on scroll
   useEffect(() => {
-    const handleScrollEvent = () => {
-      const sections = ["home", "why-choose-us", "services", "contact"];
-      let current = "home";
+  const sections = Array.from(document.querySelectorAll("section[id]"));
+  if (!sections.length) return;
 
-      sections.forEach((id) => {
-        const section = document.getElementById(id);
-        if (section && window.scrollY >= section.offsetTop - 80) current = id;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      // pick the section with the largest visible area
+      let maxRatio = 0;
+      let mostVisibleId = null;
+
+      entries.forEach((entry) => {
+        if (entry.intersectionRatio > maxRatio) {
+          maxRatio = entry.intersectionRatio;
+          mostVisibleId = entry.target.id;
+        }
       });
 
-      setActiveSection(current);
-    };
+      if (mostVisibleId) {
+        setActiveSection(mostVisibleId);
+      }
+    },
+    {
+      threshold: [0.25, 0.5, 0.75, 1], // multiple thresholds for smoother switching
+      root: null,
+      rootMargin: "-10% 0px -30% 0px", // tweak if you want earlier/later activation
+    }
+  );
 
-    window.addEventListener("scroll", handleScrollEvent);
-    return () => window.removeEventListener("scroll", handleScrollEvent);
-  }, []);
+  sections.forEach((s) => observer.observe(s));
+  return () => observer.disconnect();
+}, []);
 
   return (
     <div className="app">

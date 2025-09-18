@@ -1,6 +1,7 @@
 // AdminPanel.jsx
 import React, { useState, useEffect } from "react";
 import { auth, db } from "./firebase";
+import { useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   signOut,
@@ -13,7 +14,7 @@ function AdminPanel() {
   const [user, setUser] = useState(null); // logged-in user
   const [email, setEmail] = useState(""); // login email
   const [password, setPassword] = useState(""); // login password
-
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -115,6 +116,7 @@ function AdminPanel() {
       {/* Sidebar */}
       <div className="sidebar">
         <h2>Admin Panel</h2>
+        <button onClick={() => navigate("/")}>🏠 Back to Home</button>
         <ul>
           <li
             className={activeMenu === "services" ? "active" : ""}
