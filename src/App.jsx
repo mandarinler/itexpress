@@ -12,16 +12,12 @@ function App() {
 
   useEffect(() => {
     const fetchServices = async () => {
-      const q = query(
-        collection(db, "services"),
-        orderBy("createdAt", "desc") // 🔹 newest first
-      );
-
-      const querySnapshot = await getDocs(q);
-      const servicesData = [];
-      querySnapshot.forEach((doc) => {
-        servicesData.push({ id: doc.id, ...doc.data() });
-      });
+      const q = query(collection(db, "services"), orderBy("index", "desc")); // newest first
+      const snapshot = await getDocs(q);
+      const servicesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setServices(servicesData);
     };
 

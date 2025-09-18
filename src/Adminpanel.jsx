@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
 import "./Adminpanel.css";
 
 function AdminPanel() {
@@ -16,42 +9,54 @@ function AdminPanel() {
   const [description, setDescription] = useState("");
   const [activeMenu, setActiveMenu] = useState("services");
 
-  // Fetch services
+  // Fetch services ordered by index (newest first)
+  const fetchServices = async () => {
+    const q = query(collection(db, "services"), orderBy("index", "desc"));
+    const snapshot = await getDocs(q);
+    const servicesData = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setServices(servicesData);
+  };
+
   useEffect(() => {
-    const fetchServices = async () => {
-      const q = query(collection(db, "services"), orderBy("createdAt", "desc"));
-      const snapshot = await getDocs(q);
-      const servicesData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setServices(servicesData);
-    };
     fetchServices();
   }, []);
 
   // Add service
-  const addService = async (title, description) => {
-    if (!title || !description) return; // basic validation
+  const addService = async () => {
+    if (!title || !description) return;
 
     try {
+      // Determine the new index
+      const maxIndex = services.length ? Math.max(...services.map(s => s.index || 0)) : 0;
+      const newIndex = maxIndex + 1;
+
+      // Add to Firestore
       await addDoc(collection(db, "services"), {
         title,
         description,
-        createdAt: serverTimestamp(), // ensures timestamp is saved
+        index: newIndex,
       });
-      console.log("Service added successfully!");
+
+      // Update local state immediately
+      setServices([{ title, description, index: newIndex, id: Date.now() }, ...services]);
+      setTitle("");
+      setDescription("");
     } catch (err) {
       console.error("Error adding service:", err);
     }
   };
+
   // Delete service
   const deleteService = async (id) => {
-    await deleteDoc(doc(db, "services", id));
-    const querySnapshot = await getDocs(collection(db, "services"));
-    setServices(
-      querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-    );
+    try {
+      await deleteDoc(doc(db, "services", id));
+      setServices(services.filter((s) => s.id !== id));
+    } catch (err) {
+      console.error("Error deleting service:", err);
+    }
   };
 
   return (
@@ -77,6 +82,7 @@ function AdminPanel() {
           <div>
             <h2>Manage Services</h2>
 
+            {/* Add Service Form */}
             <div className="form">
               <input
                 type="text"
@@ -90,10 +96,11 @@ function AdminPanel() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="form-textarea"
-              ></textarea>
+              />
               <button onClick={addService}>Add Service</button>
             </div>
 
+            {/* Services List */}
             <ul className="service-list">
               {services.map((service) => (
                 <li key={service.id}>
