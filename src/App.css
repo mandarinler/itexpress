@@ -119,7 +119,7 @@ body {
 /* Section styles for Home */
 .home-section {
   height: 80vh; 
-  background: url("./homeBackground.jpeg") no-repeat center center/cover;
+  background: url("/homeBackground.jpeg") no-repeat center center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
