@@ -121,7 +121,7 @@ function App() {
       <nav className="navbar">
         <div className="nav-container">
           <div className="logo" onClick={() => handleScroll("home")}>
-            <img src="/logo.png" alt="ITExpress Logo" />
+            <img src="/Logo.png" alt="ITExpress Logo" />
           </div>
 
           <div className="menu-toggle" onClick={toggleMenu}>
