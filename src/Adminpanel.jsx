@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import "./Adminpanel.css";
+
 
 function AdminPanel() {
   const [services, setServices] = useState([]);
