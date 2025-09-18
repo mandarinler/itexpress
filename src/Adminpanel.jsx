@@ -19,34 +19,32 @@ function AdminPanel() {
   // Fetch services
   useEffect(() => {
     const fetchServices = async () => {
-      const querySnapshot = await getDocs(collection(db, "services"));
-      setServices(
-        querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      const q = query(collection(db, "services"), orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+      const servicesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setServices(servicesData);
     };
     fetchServices();
   }, []);
 
   // Add service
-  const addService = async () => {
-    if (!title || !description || !imageUrl) return;
+  const addService = async (title, description) => {
+    if (!title || !description) return; // basic validation
 
     try {
       await addDoc(collection(db, "services"), {
         title,
         description,
-        imageUrl,
-        createdAt: serverTimestamp(), // 🔹 Add timestamp
+        createdAt: serverTimestamp(), // ensures timestamp is saved
       });
-      setTitle("");
-      setDescription("");
-      setImageUrl("");
-      fetchServices(); 
+      console.log("Service added successfully!");
     } catch (err) {
       console.error("Error adding service:", err);
     }
   };
-
   // Delete service
   const deleteService = async (id) => {
     await deleteDoc(doc(db, "services", id));
