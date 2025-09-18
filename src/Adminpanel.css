@@ -4,7 +4,15 @@
   font-family: Arial, sans-serif;
 }
 
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
+  background-color: white;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -72,7 +80,6 @@ body {
   margin-bottom: 30px;
 }
 
-
 /* Form Inputs */
 .form-input {
   padding: 10px;
@@ -81,7 +88,7 @@ body {
   border-radius: 6px;
   background: white;
   font-size: 16px;
-  color: #000; /* 🔹 set font color to black */
+  color: #000;
 }
 
 /* Form Textarea - bigger and styled */
@@ -94,9 +101,8 @@ body {
   font-size: 16px;
   min-height: 120px;
   resize: vertical;
-  color: #000; /* 🔹 set font color to black */
+  color: #000;
 }
-
 
 .form button {
   padding: 10px;
@@ -152,4 +158,56 @@ body {
 
 .delete-btn:hover {
   background: #d32f45;
+}
+
+/* ===================== Login Page Styles ===================== */
+.admin-login {
+  display: flex;
+  justify-content: center;   /* horizontal centering */
+  align-items: center;       /* vertical centering */
+  height: 100vh;
+  background: #f4f4f9;
+}
+
+.login-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 320px; /* fixes width so it’s not tiny or stretched */
+}
+
+.admin-login h2 {
+  margin-bottom: 20px;
+  color: #0f3460;
+  font-size: 24px;
+}
+
+.admin-login input {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #000;
+  background: white;
+  box-sizing: border-box;
+}
+
+.admin-login button {
+  padding: 10px;
+  margin-top: 15px;
+  width: 100%;
+  background: #0f3460;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.admin-login button:hover {
+  background: #16213e;
 }
