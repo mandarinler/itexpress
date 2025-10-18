@@ -62,7 +62,6 @@ html, body {
   color: #FE0000;
 }
 
-/* underline when active */
 .nav-links button.active {
   color: #FE0000;
 }
@@ -109,7 +108,6 @@ html, body {
   }
 }
 
-/* Prevent content hiding under navbar */
 body {
   padding-top: 70px;
 }
@@ -153,11 +151,11 @@ body {
 
 /* Section styles for why choose us */
 .section-why-choose-us {
-  background: #ffffff; /* whole section white */
+  background: #ffffff; 
   width: 100%;
   padding: 100px 20px;
   text-align: center;
-  font-family: 'Montserrat', sans-serif; /* modern font */
+  font-family: 'Montserrat', sans-serif; 
 }
 
 .why-choose-us-container {
@@ -180,8 +178,8 @@ body {
   font-size: 1.4rem;
   line-height: 1.8;
   font-weight: 600;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* subtle text shadow */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* elevated shadow */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
   transition: transform 0.3s, box-shadow 0.3s;
@@ -358,13 +356,13 @@ body {
 /*contact section*/
 .section-contact {
   height: 80vh;
-  background: #ffffff; /* white background */
+  background: #ffffff; 
   padding: 80px 20px;
 }
 
 .section-contact h2 {
   text-align: center;
-  color: #FE0000; /* vibrant red */
+  color: #FE0000; 
   margin-bottom: 50px;
   font-size: 2.8rem;
   font-family: 'Montserrat', sans-serif;
@@ -383,24 +381,24 @@ body {
   width: 100%;
   padding: 15px;
   border-radius: 10px;
-  border: 1px solid #a80000; /* dark red border */
-  background: #fff0f0; /* very light red background */
+  border: 1px solid #a80000;
+  background: #fff0f0; 
   font-size: 1rem;
   font-family: 'Montserrat', sans-serif;
-  color: #4a0000; /* dark red text */
+  color: #4a0000; 
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: none;
-  border-color: #FE0000; /* vibrant red on focus */
+  border-color: #FE0000; 
   box-shadow: 0 0 5px rgba(254,0,0,0.5);
 }
 
 .contact-form button {
   padding: 15px;
   border-radius: 10px;
-  background: #FE0000; /* vibrant red */
+  background: #FE0000; 
   color: #fff;
   font-size: 1.1rem;
   border: none;
@@ -410,7 +408,7 @@ body {
 }
 
 .contact-form button:hover {
-  background: #c80000; /* slightly darker red on hover */
+  background: #c80000; 
 }
 
 .contact-form p {
@@ -428,7 +426,7 @@ body {
 
 /* Footer styles */
 .footer {
-  background-color: #FE0000; /* vibrant red */
+  background-color: #FE0000;
   color: #ffffff;
   padding: 40px 20px;
   text-align: center;

@@ -7,7 +7,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import "./Adminpanel.css";
 
 function AdminPanel() {
@@ -19,6 +19,9 @@ function AdminPanel() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [activeMenu, setActiveMenu] = useState("services");
+  const [editingId, setEditingId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   // Observe auth state
   useEffect(() => {
@@ -30,12 +33,12 @@ function AdminPanel() {
 
   // Fetch services
   useEffect(() => {
-    if (!user) return; // only fetch if logged in
+    if (!user) return; 
     const fetchServices = async () => {
       const querySnapshot = await getDocs(collection(db, "services"));
       const servicesData = querySnapshot.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .sort((a, b) => (b.index || 0) - (a.index || 0)); // newest first
+        .sort((a, b) => (b.index || 0) - (a.index || 0)); 
       setServices(servicesData);
     };
     fetchServices();
@@ -86,7 +89,42 @@ function AdminPanel() {
     setServices(services.filter((s) => s.id !== id));
   };
 
-  // === Render ===
+  // Start editing a service
+  const startEditing = (service) => {
+    setEditingId(service.id);
+    setEditTitle(service.title);
+    setEditDescription(service.description);
+  };
+
+  // Cancel editing
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditTitle("");
+    setEditDescription("");
+  };
+
+  // Update service
+  const updateService = async () => {
+    if (!editTitle || !editDescription) return;
+    try {
+      await updateDoc(doc(db, "services", editingId), {
+        title: editTitle,
+        description: editDescription,
+      });
+    
+      setServices(services.map(service => 
+        service.id === editingId 
+          ? { ...service, title: editTitle, description: editDescription }
+          : service
+      ));
+      
+      cancelEditing();
+    } catch (err) {
+      console.error("Error updating service:", err);
+    }
+  };
+
+
   if (!user) {
     // Login form
     return (
@@ -156,16 +194,52 @@ function AdminPanel() {
             <ul className="service-list">
               {services.map((service) => (
                 <li key={service.id}>
-                  <div>
-                    <strong>{service.title}</strong>
-                    <p>{service.description}</p>
-                  </div>
-                  <button
-                    className="delete-btn"
-                    onClick={() => deleteService(service.id)}
-                  >
-                    ✖
-                  </button>
+                  {editingId === service.id ? (
+                    <div className="edit-form">
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="edit-input"
+                        placeholder="Service title"
+                      />
+                      <textarea
+                        value={editDescription}
+                        onChange={(e) => setEditDescription(e.target.value)}
+                        className="edit-textarea"
+                        placeholder="Service description"
+                      />
+                      <div className="edit-buttons">
+                        <button onClick={updateService} className="save-btn">
+                          Save
+                        </button>
+                        <button onClick={cancelEditing} className="cancel-btn">
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div>
+                        <strong>{service.title}</strong>
+                        <p>{service.description}</p>
+                      </div>
+                      <div className="action-buttons">
+                        <button
+                          className="edit-btn"
+                          onClick={() => startEditing(service)}
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => deleteService(service.id)}
+                        >
+                          ✖
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
